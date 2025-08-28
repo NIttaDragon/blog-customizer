@@ -18,14 +18,26 @@ export type OptionType = {
 export const fontFamilyOptions: OptionType[] & {
 	optionClassName?: FontFamiliesClasses;
 } = [
-	{ title: 'Open Sans', value: 'Open Sans', className: fontFamilyClasses[0] },
-	{ title: 'Ubuntu', value: 'Ubuntu', className: fontFamilyClasses[1] },
+	{
+		title: 'Open Sans',
+		value: 'Open Sans',
+		className: fontFamilyClasses[0],
+	},
+	{
+		title: 'Ubuntu',
+		value: 'Ubuntu',
+		className: fontFamilyClasses[1],
+	},
 	{
 		title: 'Cormorant Garamond',
 		value: 'Cormorant Garamond',
 		className: fontFamilyClasses[2],
 	},
-	{ title: 'Days One', value: 'Days One', className: fontFamilyClasses[3] },
+	{
+		title: 'Days One',
+		value: 'Days One',
+		className: fontFamilyClasses[3],
+	},
 	{
 		title: 'Merriweather',
 		value: 'Merriweather',
@@ -163,9 +175,21 @@ export const contentWidthArr: OptionType[] = [
 ];
 
 export const fontSizeOptions: OptionType[] = [
-	{ title: '18px', value: '18px', className: 'font-size-18' },
-	{ title: '25px', value: '25px', className: 'font-size-25' },
-	{ title: '38px', value: '38px', className: 'font-size-38' },
+	{
+		title: '18px',
+		value: '18px',
+		className: 'font-size-18',
+	},
+	{
+		title: '25px',
+		value: '25px',
+		className: 'font-size-25',
+	},
+	{
+		title: '38px',
+		value: '38px',
+		className: 'font-size-38',
+	},
 ];
 
 export const defaultArticleState = {
