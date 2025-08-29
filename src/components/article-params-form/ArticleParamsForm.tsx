@@ -1,7 +1,7 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import { Text } from 'src/ui/text';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 import styles from './ArticleParamsForm.module.scss';
 import { RadioGroup } from 'src/ui/radio-group';
@@ -14,7 +14,10 @@ import {
 	contentWidthArr,
 	fontSizeOptions,
 	OptionType,
+	defaultArticleState,
 } from 'src/constants/articleProps';
+import clsx from 'clsx';
+import { useClose } from 'src/hooks/useClose';
 
 interface ArticleParamsFormProps {
 	onChange: (
@@ -31,43 +34,35 @@ interface ArticleParamsFormProps {
 export const ArticleParamsForm: React.FC<ArticleParamsFormProps> = ({
 	onChange,
 }) => {
-	const [isOpen, setOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [selectedFontSize, setSelectedFontSize] = useState<OptionType>(
-		fontSizeOptions[0]
+		defaultArticleState.fontSizeOption
 	);
 	const [selectedFontType, setSelectedFontType] = useState<OptionType>(
-		fontFamilyOptions[0]
+		defaultArticleState.fontFamilyOption
 	);
 	const [selectedFontColor, setSelectedFontColor] = useState<OptionType>(
-		fontColors[0]
+		defaultArticleState.fontColor
 	);
 	const [selectedBgColor, setSelectedBgColor] = useState<OptionType>(
-		backgroundColors[0]
+		defaultArticleState.backgroundColor
 	);
 	const [selectedContentWidth, setSelectedContentWidth] = useState<OptionType>(
-		contentWidthArr[0]
+		defaultArticleState.contentWidth
 	);
 
 	const formRef = useRef<HTMLFormElement>(null);
 
-	useEffect(() => {
-		const handleClickOutside = (event: MouseEvent) => {
-			if (formRef.current && !formRef.current.contains(event.target as Node)) {
-				setOpen(false);
-				console.log('close');
-			}
-		};
-
-		document.addEventListener('mousedown', handleClickOutside);
-
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-		};
-	}, []);
-
-	const openFunction = () => {
-		setOpen(!isOpen);
+	const togleMenu = () => {
+		setIsMenuOpen(!isMenuOpen);
 	};
+
+	//спасибо большое, за пример
+	useClose({
+		isOpen: isMenuOpen,
+		onClose: togleMenu,
+		rootRef: formRef,
+	});
 
 	const handleRadioChange = (option: OptionType) => {
 		setSelectedFontSize(option);
@@ -104,13 +99,13 @@ export const ArticleParamsForm: React.FC<ArticleParamsFormProps> = ({
 	return (
 		<>
 			<ArrowButton
-				isOpen={isOpen}
+				isOpen={isMenuOpen}
 				onClick={() => {
-					openFunction();
+					togleMenu();
 				}}
 			/>
 			<aside
-				className={`${styles.container} ${isOpen ? styles.container_open : ''}`}
+				className={clsx(styles.container, isMenuOpen && styles.container_open)}
 				ref={formRef}>
 				<form className={styles.form} onSubmit={handleSubmit}>
 					<Text as={'p'} size={31} weight={800}>
@@ -151,18 +146,12 @@ export const ArticleParamsForm: React.FC<ArticleParamsFormProps> = ({
 							htmlType='reset'
 							type='clear'
 							onClick={() => {
-								setSelectedFontSize(fontSizeOptions[0]);
-								setSelectedFontType(fontFamilyOptions[0]);
-								setSelectedFontColor(fontColors[0]);
-								setSelectedBgColor(backgroundColors[0]);
-								setSelectedContentWidth(contentWidthArr[0]);
-								onChange({
-									fontFamilyOption: fontFamilyOptions[0],
-									fontSizeOption: fontSizeOptions[0],
-									fontColor: fontColors[0],
-									backgroundColor: backgroundColors[0],
-									contentWidth: contentWidthArr[0],
-								});
+								setSelectedFontSize(defaultArticleState.fontSizeOption);
+								setSelectedFontType(defaultArticleState.fontFamilyOption);
+								setSelectedFontColor(defaultArticleState.fontColor);
+								setSelectedBgColor(defaultArticleState.backgroundColor);
+								setSelectedContentWidth(defaultArticleState.contentWidth);
+								onChange(defaultArticleState);
 							}}
 						/>
 						<Button title='Применить' htmlType='submit' type='apply' />
